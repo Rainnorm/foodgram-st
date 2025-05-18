@@ -1,5 +1,8 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -14,7 +17,12 @@ SECRET_KEY = 'django-insecure-=4cu%9pc(j$vhzvlxx-&z-ue2vfvqx)5)ne31vu55$!iol^o-4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    'backend',  # Имя сервиса в docker-compose
+    '127.0.0.1',
+    '172.26.52.219',
+]
 
 
 # Application definition
@@ -68,22 +76,22 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "HOST": os.getenv("DB_HOST", "localhost"),
-#         "PORT": os.getenv("DB_PORT", "5432"),
-#         "NAME": os.getenv("DB_NAME", "foodgram-db"),
-#         "USER": os.getenv("DB_USER", "postgres"),
-#         "PASSWORD": os.getenv("DB_PASSWORD", "postgres"),
-#     }
-# }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": os.getenv("DB_ENGINE", default="django.db.backends.sqlite3"),
+        "NAME": os.getenv("DB_NAME", default=(BASE_DIR / "db.sqlite3")),
+        "USER": os.getenv("POSTGRES_USER", default=None),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD", default=None),
+        "HOST": os.getenv("DB_HOST", default=None),
+        "PORT": os.getenv("DB_PORT", default=None),
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 # Password validation
