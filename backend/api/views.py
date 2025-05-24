@@ -9,6 +9,7 @@ from djoser.views import UserViewSet as DjoserUserViewSet
 from django.db.models import Sum
 import base64
 import uuid
+from django.http import HttpResponse
 
 from users.models import User, Subscription
 from recipes.models import Recipe, Ingredient, FavoriteRecipe, ShoppingCart
@@ -148,10 +149,12 @@ class RecipeViewSet(viewsets.ModelViewSet, BaseRecipeRelationView):
             amount = item['total']
             content.append(f"- {name} ({unit}): {amount}")
 
-        return Response(
-            {"shopping_list": "\n".join(content)},
-            status=status.HTTP_200_OK
-        )
+        text_data = "\n".join(content)
+
+        response = HttpResponse(text_data, content_type='text/plain')
+        response[
+            'Content-Disposition'] = 'attachment; filename="shopping_list.txt"'
+        return response
 
 
 class UserViewSet(DjoserUserViewSet):

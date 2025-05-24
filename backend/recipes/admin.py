@@ -16,6 +16,8 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ('username', 'email', 'first_name', 'last_name')
     list_filter = ('is_active', 'is_staff', 'is_superuser')
     filter_horizontal = ('groups', 'user_permissions')
+    verbose_name = "Пользователь"
+    verbose_name_plural = "Пользователи"
 
     def recipes_count(self, obj):
         return obj.recipes.count()
@@ -50,7 +52,7 @@ class RecipeAdmin(admin.ModelAdmin):
     inlines = (RecipeIngredientInline,)
 
     def favorites_count(self, obj):
-        return obj.favoriterecipes.count()
+        return obj.favorited_by.count()
     favorites_count.short_description = 'В избранном'
 
 
