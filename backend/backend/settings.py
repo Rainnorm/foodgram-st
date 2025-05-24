@@ -19,7 +19,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost',
-    'backend',  # Имя сервиса в docker-compose
     '127.0.0.1',
     '172.26.52.219',
 ]
@@ -79,7 +78,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": os.getenv("DB_ENGINE", default="django.db.backends.sqlite3"),
-        "NAME": os.getenv("DB_NAME", default=(BASE_DIR / "db.sqlite3")),
+        "NAME": os.getenv("DB_NAME", default=str(BASE_DIR / "db.sqlite3")),
         "USER": os.getenv("POSTGRES_USER", default=None),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD", default=None),
         "HOST": os.getenv("DB_HOST", default=None),
@@ -129,10 +128,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = BASE_DIR / "static"
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -142,21 +141,26 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "users.User"
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.TokenAuthentication",
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
     ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'api.pagination.SitePagination',
+    'PAGE_SIZE': 6,
 }
 
 DJOSER = {
-    "LOGIN_FIELD": "email",
-    "HIDE_USERS": False,
-    "SERIALIZERS": {
-        "user": "api.serializers.UserProfileSerializer",
-        "current_user": "api.serializers.UserProfileSerializer",
+    'LOGIN_FIELD': 'email',
+    'HIDE_USERS': False,
+    'SERIALIZERS': {
+        'user': 'api.serializers.UserProfileSerializer',
+        'current_user': 'api.serializers.UserProfileSerializer',
     },
-    "PERMISSIONS": {
-        "user": ["rest_framework.permissions.IsAuthenticated"],
-        "user_list": ["rest_framework.permissions.AllowAny"],
-        "current_user": ["rest_framework.permissions.IsAuthenticated"],
+    'PERMISSIONS': {
+        'user': ['rest_framework.permissions.IsAuthenticated'],
+        'user_list': ['rest_framework.permissions.AllowAny'],
+        'current_user': ['rest_framework.permissions.IsAuthenticated'],
     },
 }

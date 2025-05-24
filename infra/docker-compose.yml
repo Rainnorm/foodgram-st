@@ -40,7 +40,6 @@ services:
     container_name: foodgram-db
     image: postgres:13
     environment:
-      DJANGO_ADMIN_PASSWORD: LOLOTRA1
       POSTGRES_DB: foodgram
       POSTGRES_USER: foodgram_user
       POSTGRES_PASSWORD: foodgram_password
