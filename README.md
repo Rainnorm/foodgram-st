@@ -18,7 +18,7 @@ DB_PORT=5432
 DEBUG=True                    
 ```
 
-Запустить docker compose:
+Запустить docker compose из папки infra:
 
 ```bash
 docker compose up --build
